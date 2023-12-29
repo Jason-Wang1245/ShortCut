@@ -1,0 +1,23 @@
+#course-form{
+    margin-top: 0.5em;
+}
+
+#container {
+    width: 25em;
+    height: 30em;
+    padding: 1em;
+    overflow: auto;
+    background-color: #092635;
+}
+
+.create-course{
+    margin-bottom: 1em;
+}
+
+.create-course-form {
+    margin-bottom: 1em;
+}
+
+.course {
+    margin-bottom: 1em;
+}
