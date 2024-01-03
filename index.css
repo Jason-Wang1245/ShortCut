@@ -10,6 +10,13 @@
     background-color: #092635;
 }
 
+#edit-mode {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 .create-course{
     margin-bottom: 1em;
 }
@@ -20,4 +27,28 @@
 
 .course {
     margin-bottom: 1em;
+}
+
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-row {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-label {
+    margin-top: 0.25em;
+}
+
+.edit-mode {
+    display: none;
+}
+
+.edit-icon {
+    width: 2em;
+    height: 2em;
+    margin-bottom: 0.5em;
 }

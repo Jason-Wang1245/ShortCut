@@ -9,13 +9,19 @@
   </head>
   <body>
     <div id="container">
-      <div class="d-grid gap-2 create-course">
-        <button id="create-course" class="btn btn-dark" type="button" style="background-color: #1b4242; border: 0">Create Course</button>
+      <div class="header-row">
+        <button id="edit-mode"><img src="icons/edit-off.png" alt="edit-off.png" class="edit-icon"></button>
       </div>
 
+      <div class="edit-mode">
+        <div class="d-grid gap-2 create-course">
+          <button id="create-course" class="btn btn-dark" type="button" style="background-color: #1b4242; border: 0">Create Course</button>
+        </div>
+      </div>
+       
       <div class="card create-course-form" style="background-color: #1b4242; display: none;">
         <div class="card-body">
-          <form id="submit-form">
+          <form>
             <div class="mb-3">
               <label for="course-name" class="form-label text-white">Course Name</label>
               <input type="text" class="form-control" id="course-name" />
@@ -29,11 +35,28 @@
         <div class="card-header" style="color: white">Course Name</div>
         <div class="card-body">
           <ul class="list-group list-group-flush link-list">
-            <li class="list-group-item rounded-pill" style="background-color: #5c8374; border: 0; margin-bottom: 0.5em"><a class="link-light link-offset-2 link-underline link-underline-opacity-0" href="#">Underline opacity 0</a></li>
-            <li class="list-group-item rounded-pill" style="background-color: #5c8374; border: 0; margin-bottom: 0.5em"><a class="link-light link-offset-2 link-underline link-underline-opacity-0" href="#">Underline opacity 0</a></li>
-            <li class="list-group-item rounded-pill" style="background-color: #5c8374; border: 0; margin-bottom: 0.5em"><a class="link-light link-offset-2 link-underline link-underline-opacity-0" href="#">Underline opacity 0</a></li>
+            <li class="list-group-item rounded-pill" style="background-color: #5c8374; border: 0; margin-bottom: 0.5em; display: flex; justify-content: space-between;">
+              <a class="link-light link-offset-2 link-underline link-underline-opacity-0" href="#">Underline opacity 0</a>
+              <div class="edit-mode">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </li>
           </ul>
-          <button type="button" class="btn btn-primary" style="background-color: #9ec8b9; border: 0">Create Link</button>
+          <div class="edit-mode">
+            <hr/>
+            <form>
+              <div class="mb-3">
+                <label for="course-name" class="form-label text-white">Link Name</label>
+                <input type="text" class="form-control" id="link-name" />
+                <label for="course-name" class="form-label text-white">Link</label>
+                <input type="text" class="form-control" id="link" />
+              </div>
+              <div class="bottom-row">
+                <button type="submit" class="btn btn-primary" style="background-color: #9ec8b9; border: 0">Add Link</button>
+                <button type="button" class="btn btn-danger">Delete Course</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

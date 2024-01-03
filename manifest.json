@@ -2,18 +2,18 @@
     "manifest_version": 3,
     "name": "My Extension",
     "version": "1.0.1",
-    "permissions": ["activeTab"],
+    "permissions": ["activeTab", "storage"],
     "icons": {
-        "16": "icon.png",
-        "32": "icon.png",
-        "48": "icon.png",
-        "128": "icon.png"
+        "16": "icons/icon.png",
+        "32": "icons/icon.png",
+        "48": "icons/icon.png",
+        "128": "icons/icon.png"
       },
     "action": {
         "default_icon": {              
-            "16": "icon.png",   
-            "24": "icon.png",   
-            "32": "icon.png"
+            "16": "icons/icon.png",   
+            "24": "icons/icon.png",   
+            "32": "icons/icon.png"
         },
         "default_title": "ShortCut",
         "default_popup": "index.html"
