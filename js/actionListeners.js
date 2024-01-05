@@ -1,7 +1,7 @@
-const createCourseButton = document.getElementById("create-course");
-const createCourseForm = document.querySelector(".create-course-form");
-const createCourseNameInput = document.getElementById("course-name");
-const editButton = document.getElementById("edit-mode");
+deleteButton.addEventListener("click", () => {
+  localStorage.setItem("courses", "");
+  location.reload();
+});
 
 editButton.addEventListener("click", () => {
   const editModeContainers = document.getElementsByClassName("edit-mode");
@@ -12,7 +12,6 @@ editButton.addEventListener("click", () => {
   if (editButton.firstChild.getAttribute("src") === "icons/edit-off.png") {
     editButton.firstChild.setAttribute("src", "icons/edit-on.png");
   } else {
-    const currentDisplay = getComputedStyle(createCourseForm).display;
     createCourseForm.style.display = "none";
     editButton.firstChild.setAttribute("src", "icons/edit-off.png");
   }
@@ -21,10 +20,19 @@ editButton.addEventListener("click", () => {
 createCourseButton.addEventListener("click", () => {
   const currentDisplay = getComputedStyle(createCourseForm).display;
   createCourseForm.style.display = currentDisplay === "none" ? "block" : "none";
+  createCourseError.style.display = "none";
 });
 
 createCourseForm.addEventListener("submit", (event) => {
   event.preventDefault();
+
+  // Error check for validity of course name
+  if (createCourseNameInput.value.trim() === "") {
+    createCourseError.style.display = "block";
+    return;
+  } else {
+    createCourseError.style.display = "none";
+  }
 
   const courseId = crypto.randomUUID();
 
@@ -38,7 +46,7 @@ createCourseForm.addEventListener("submit", (event) => {
   const cardHeaderDiv = document.createElement("div");
   cardHeaderDiv.className = "card-header";
   cardHeaderDiv.style.color = "white";
-  cardHeaderDiv.textContent = createCourseNameInput.value;
+  cardHeaderDiv.textContent = createCourseNameInput.value.trim();
 
   // Create the card body div
   const cardBodyDiv = document.createElement("div");
@@ -56,7 +64,7 @@ createCourseForm.addEventListener("submit", (event) => {
   // Create the form element
   const formElement = document.createElement("form");
 
-  // Create horizontal rule 
+  // Create horizontal rule
   const horizontalRule = document.createElement("hr");
 
   // Add horizontal rule to top of form
@@ -77,6 +85,12 @@ createCourseForm.addEventListener("submit", (event) => {
   inputLinkName.className = "form-control";
   inputLinkName.id = "linkName" + courseId;
 
+  const inputLinkNameError = document.createElement("p");
+  inputLinkNameError.className = "text-danger";
+  inputLinkNameError.id = "linkNameError" + courseId;
+  inputLinkNameError.style.display = "none";
+  inputLinkNameError.innerText = "Please enter a name";
+
   // Create the label and input elements for "Link"
   const labelLink = document.createElement("label");
   labelLink.htmlFor = "link";
@@ -88,11 +102,19 @@ createCourseForm.addEventListener("submit", (event) => {
   inputLink.className = "form-control";
   inputLink.id = "linkInput" + courseId;
 
+  const inputLinkError = document.createElement("p");
+  inputLinkError.className = "text-danger";
+  inputLinkError.id = "linkError" + courseId;
+  inputLinkError.style.display = "none";
+  inputLinkError.innerText = "Make sure the link ends with a domain suffix";
+
   // Append the label and input elements to the mb-3 div
   mb3Div.appendChild(labelLinkName);
   mb3Div.appendChild(inputLinkName);
+  mb3Div.appendChild(inputLinkNameError);
   mb3Div.appendChild(labelLink);
   mb3Div.appendChild(inputLink);
+  mb3Div.appendChild(inputLinkError);
 
   // Create the bottom-row div
   const bottomRowDiv = document.createElement("div");
@@ -136,63 +158,8 @@ createCourseForm.addEventListener("submit", (event) => {
   cardDiv.appendChild(cardBodyDiv);
 
   // Append the main card div to the document body
-  document.getElementById("container").appendChild(cardDiv);
+  courses.appendChild(cardDiv);
   createCourseForm.style.display = "none";
+
+  updateLocalStorage();
 });
-
-const addLink = (event) => {
-  event.preventDefault();
-  const id = event.srcElement.id.substring(3);
-  const linkList = document.getElementById(id).lastChild.firstChild;
-
-  const linkId = crypto.randomUUID();
-
-  var liElement = document.createElement("li");
-  liElement.className = "list-group-item rounded-pill";
-  liElement.style.backgroundColor = "#5c8374";
-  liElement.style.border = "0";
-  liElement.style.marginBottom = "0.5em";
-  liElement.style.display = "flex";
-  liElement.style.justifyContent = "space-between";
-  liElement.id = "link" + linkId;
-
-  // Create a element
-  var aElement = document.createElement("a");
-  aElement.className = "link-light link-offset-2 link-underline link-underline-opacity-0";
-  aElement.href = document.getElementById("linkInput" + id).value;
-  aElement.textContent = document.getElementById("linkName" + id).value;
-  aElement.target = "_blank";
-
-  // Create div element for edit mode
-  var divEditMode = document.createElement("div");
-  divEditMode.className = "edit-mode";
-  divEditMode.style.display = "block";
-
-  // Create button element
-  var buttonElement = document.createElement("button");
-  buttonElement.type = "button";
-  buttonElement.className = "btn-close";
-  buttonElement.setAttribute("data-bs-dismiss", "modal");
-  buttonElement.setAttribute("aria-label", "Close");
-  buttonElement.id = "linkDelete" + linkId;
-  buttonElement.onclick = deleteLink;
-
-  // Append elements to their respective parent elements
-  divEditMode.appendChild(buttonElement);
-  liElement.appendChild(aElement);
-  liElement.appendChild(divEditMode);
-
-  // Add li to linkList
-  linkList.appendChild(liElement);
-}
-
-const deleteCourse = (event) => {
-  const id = event.srcElement.id.substring(6);
-  const courseElement = document.getElementById(id);
-  courseElement.remove();
-}
-
-const deleteLink = (event) => {
-  const linkElement = event.srcElement.parentNode.parentNode;
-  linkElement.remove();
-}

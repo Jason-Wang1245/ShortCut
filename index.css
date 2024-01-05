@@ -10,7 +10,7 @@
     background-color: #092635;
 }
 
-#edit-mode {
+.edit-button {
     background: none;
     border: none;
     padding: 0;
@@ -36,7 +36,7 @@
 
 .header-row {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .form-label {
