@@ -2,9 +2,11 @@ import { useRef, useState } from "react";
 import "../index.css";
 import Modal, { ModalHandles } from "./components/Modal";
 import { addGroup, getLocalStorageData } from "./tools/data";
+import { Group } from "./types";
 
 export default function App() {
   const newGroupModal = useRef<ModalHandles>();
+  const [data, setData] = useState<Group[]>(getLocalStorageData() === null ? [] : getLocalStorageData()!);
   const [groupName, setGroupName] = useState<string>("");
 
   function handleUpdateGroupName(e: React.ChangeEvent<HTMLInputElement>) {
@@ -14,6 +16,7 @@ export default function App() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     addGroup(groupName);
+    setData(getLocalStorageData()!);
   }
 
   return (
@@ -25,7 +28,9 @@ export default function App() {
         </form>
       </Modal>
       <button onClick={() => newGroupModal.current?.open()}>Create Group</button>
-      {getLocalStorageData() && getLocalStorageData()?.map((group, i) => <div key={i}>{group.name}</div>)}
+      {data.map((group, i) => (
+        <div key={i}>{group.name}</div>
+      ))}
     </div>
   );
 }
