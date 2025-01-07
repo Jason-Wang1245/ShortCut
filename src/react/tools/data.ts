@@ -8,12 +8,16 @@ function writeToLocalStorage(newData: Group[]) {
   localStorage.setItem("shortcut", JSON.stringify(newData));
 }
 
-export function addGroup(groupName: string) {
+export function addGroup(groupName: string, groupColor: string): boolean {
   if (localStorage.getItem("shortcut") === null) initLocalStorage();
   const localData: Group[] = [...JSON.parse(localStorage.getItem("shortcut")!)];
 
-  localData.push({ name: groupName, links: [] });
+  if (localData.find(group => group.name === groupName) != undefined) return false;
+
+  localData.push({ name: groupName, color: groupColor, links: [] });
   writeToLocalStorage(localData);
+
+  return true;
 }
 
 export function getLocalStorageData(): Group[] | null {

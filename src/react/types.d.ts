@@ -5,5 +5,6 @@ export type Link = {
 
 export type Group = {
   name: string;
+  color: string;
   links: Link[];
 };
