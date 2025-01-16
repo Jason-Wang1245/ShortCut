@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useImperativeHandle } from "react";
+import React, { forwardRef, useRef, useImperativeHandle, useEffect } from "react";
 
 export type ModalHandles = {
   open: () => void;
@@ -19,8 +19,19 @@ export const Modal = forwardRef(({ children, open, onClose }: { children: React.
 
   function handleClose() {
     dialogRef.current!.close();
-    if (onClose != undefined) onClose();
   }
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "c" || event.key === "C") handleClose();
+    }
+
+    const dialogElement = dialogRef.current;
+    dialogElement?.addEventListener("keydown", handleKeyDown);
+    return () => {
+      dialogElement?.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <dialog ref={dialogRef} className="modal h-full w-full" open={open}>

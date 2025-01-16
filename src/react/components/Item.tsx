@@ -8,7 +8,7 @@ export default function Item({
   onSetActiveGroup: (groupName: string) => void;
 }) {
   return (
-    <button className="flex flex-col justify-center items-center w-fit" onClick={() => onSetActiveGroup(title)}>
+    <button className="flex flex-col justify-center items-center w-fit" onClick={() => onSetActiveGroup(title)} tabIndex={-1}>
       <div className="h-14 w-14 rounded-xl" style={{ backgroundColor: bgColor }} />
       <p className="truncate w-14 text-center">{title}</p>
     </button>
