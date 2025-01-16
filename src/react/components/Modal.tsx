@@ -5,12 +5,9 @@ export type ModalHandles = {
   close: () => void;
 };
 
-// ForwardRef allows the parent to control the modal using a ref
-export const Modal = forwardRef(({ children }: { children: React.ReactNode }, ref) => {
-  // Reference to the dialog element
+export const Modal = forwardRef(({ children, open, onClose }: { children: React.ReactNode; open?: boolean; onClose?: Function }, ref) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  // Expose open and close methods to the parent using useImperativeHandle
   useImperativeHandle(ref, () => ({
     open: () => {
       dialogRef.current!.showModal();
@@ -20,13 +17,18 @@ export const Modal = forwardRef(({ children }: { children: React.ReactNode }, re
     },
   }));
 
+  function handleClose() {
+    dialogRef.current!.close();
+    if (onClose != undefined) onClose();
+  }
+
   return (
-    <dialog ref={dialogRef} className="modal">
-      <div className="modal-content">
-        <button onClick={() => dialogRef.current!.close()} className="close-btn">
-          X
+    <dialog ref={dialogRef} className="modal h-full w-full" open={open}>
+      <div className="h-full w-full">
+        <button onClick={handleClose} className="close-btn block">
+          <i className="bi bi-x text-2xl ml-1" />
         </button>
-        {children}
+        <div className="w-full px-4 pb-4">{children}</div>
       </div>
     </dialog>
   );

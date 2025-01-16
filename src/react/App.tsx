@@ -5,11 +5,17 @@ import { addGroup, getLocalStorageData } from "./tools/data";
 import { Group } from "./types";
 import Item from "./components/Item";
 
+// import Group from "./components/Group";
+
 export default function App() {
   const newGroupModal = useRef<ModalHandles>();
+  const groupModal = useRef<ModalHandles>();
   const [data, setData] = useState<Group[]>(getLocalStorageData() === null ? [] : getLocalStorageData()!);
   const [groupName, setGroupName] = useState<string>("");
   const [groupColor, setGroupColor] = useState<string>("");
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+
+  console.log(activeGroup);
 
   function handleUpdateGroupName(e: React.ChangeEvent<HTMLInputElement>) {
     setGroupName(e.target.value);
@@ -17,6 +23,16 @@ export default function App() {
 
   function handleUpdateGroupColor(e: React.ChangeEvent<HTMLInputElement>) {
     setGroupColor(e.target.value);
+  }
+
+  function handleSetActiveGroup(groupName: string) {
+    setActiveGroup(groupName);
+    groupModal.current?.open();
+  }
+
+  function handleRemoveActiveGroup() {
+    setActiveGroup(null);
+    groupModal.current?.close();
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -39,10 +55,14 @@ export default function App() {
           <button type="submit">Add</button>
         </form>
       </Modal>
+      <Modal ref={groupModal} onClose={handleRemoveActiveGroup}>
+        {activeGroup}
+      </Modal>
+
       <button onClick={() => newGroupModal.current?.open()}>Create Group</button>
       <div className="flex gap-4 p-2">
         {data.map((group, i) => (
-          <Item key={i} title={group.name} bgColor={group.color} />
+          <Item key={i} title={group.name} bgColor={group.color} onSetActiveGroup={handleSetActiveGroup} />
         ))}
       </div>
     </div>
