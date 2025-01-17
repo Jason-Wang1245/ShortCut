@@ -48,14 +48,14 @@ export default function App() {
 
   return (
     <div className="w-[26rem] h-[35rem]">
-      <Modal ref={newGroupModal}>
+      <Modal ref={newGroupModal} heading="Create New Group">
         <form onSubmit={handleSubmit}>
           <input type="text" value={groupName} onChange={handleUpdateGroupName} />
           <input type="color" value={groupColor} onChange={handleUpdateGroupColor} />
           <button type="submit">Add</button>
         </form>
       </Modal>
-      <Modal ref={groupModal} onClose={handleRemoveActiveGroup}>
+      <Modal ref={groupModal} onClose={handleRemoveActiveGroup} heading={activeGroup!}>
         {activeGroup}
       </Modal>
 
