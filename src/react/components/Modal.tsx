@@ -35,7 +35,7 @@ export const Modal = forwardRef(
     }, []);
 
     return (
-      <dialog ref={dialogRef} className="modal h-full w-full" open={open}>
+      <dialog ref={dialogRef} className="w-full" open={open}>
         <div className="h-full w-full">
           <div className="flex gap-1">
             <button onClick={handleClose} className="ml-1">
