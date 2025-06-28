@@ -25,8 +25,8 @@ export default function CreateTab({ onDataUpdate }: { onDataUpdate: () => void }
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger>
-          <Button>New Tab</Button>
+        <DialogTrigger className="w-full">
+          <Button className="w-full">New Tab</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader className="text-left">
