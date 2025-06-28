@@ -15,6 +15,8 @@ export function addTab(name: string) {
   return true;
 }
 
+export function deleteTab() {}
+
 export function getData() {
   const storageJson = localStorage.getItem("shortcut");
   const storageObject: Shortcut = storageJson ? JSON.parse(storageJson) : {};
