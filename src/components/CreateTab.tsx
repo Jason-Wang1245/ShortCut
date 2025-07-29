@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useState } from "react";
@@ -38,27 +38,29 @@ export default function CreateTab({ onDataUpdate }: { onDataUpdate: () => void }
           <DialogHeader className="text-left">
             <DialogTitle>New Tab</DialogTitle>
           </DialogHeader>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className="grid w-full items-center gap-3">
-              <Label htmlFor="tab-name">Tab Name</Label>
-              <Input id="tab-name" value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-
-            {error && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertCircleIcon />
-                <AlertTitle>{error}</AlertTitle>
-              </Alert>
-            )}
-
-            <DialogFooter className="mt-2">
-              <div className="w-full flex justify-end">
-                <Button type="submit" onClick={handleAddTab}>
-                  Create
-                </Button>
+          <DialogDescription>
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="grid w-full items-center gap-3">
+                <Label htmlFor="tab-name">Tab Name</Label>
+                <Input id="tab-name" value={name} onChange={(e) => setName(e.target.value)} />
               </div>
-            </DialogFooter>
-          </form>
+
+              {error && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertCircleIcon />
+                  <AlertTitle>{error}</AlertTitle>
+                </Alert>
+              )}
+
+              <DialogFooter className="mt-2">
+                <div className="w-full flex justify-end">
+                  <Button type="submit" onClick={handleAddTab}>
+                    Create
+                  </Button>
+                </div>
+              </DialogFooter>
+            </form>
+          </DialogDescription>
         </DialogContent>
       </Dialog>
     </div>
