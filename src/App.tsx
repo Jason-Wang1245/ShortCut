@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CreateTab from "./components/CreateTab";
-import { deleteTab, getData } from "./lib/storage";
+import { deleteTab, deleteShortcut, getData } from "./lib/storage";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "./components/ui/button";
 import CreateShortcut from "./components/CreateShortcut";
@@ -15,6 +15,19 @@ function App() {
 
   function updateData() {
     setData(getData());
+  }
+
+  function openShortcut(link: string) {
+    // Use Chrome extension API when available; fall back to window.open during web dev
+    try {
+      if (typeof chrome !== "undefined" && chrome?.tabs?.create) {
+        chrome.tabs.create({ url: link });
+      } else {
+        window.open(link, "_blank", "noopener,noreferrer");
+      }
+    } catch {
+      window.open(link, "_blank", "noopener,noreferrer");
+    }
   }
 
   return (
@@ -38,27 +51,42 @@ function App() {
         </TabsList>
         {tabNameList.map((folderName) => (
           <TabsContent key={folderName} value={folderName} className="flex-1 w-auto px-1">
-            {data[folderName].map((shortcut, i) => (
-              <div
-                key={`${shortcut.name}-${i}`}
-                className="w-full flex justify-between bg-black/70 text-white hover:bg-black/80 py-1 px-2 rounded-md items-center duration-200 ease-in hover:cursor-pointer"
-              >
-                <p className="text-base ml-2">{shortcut.name}</p>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-transparent hover:text-white">
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="start">
-                    <DropdownMenuItem>
-                      <button>Delete</button>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ))}
-
+            <div className="flex flex-col gap-1">
+              {data[folderName].map((shortcut, i) => (
+                <div
+                  key={`${shortcut.name}-${i}`}
+                  className="w-full flex justify-between bg-black/70 text-white hover:bg-black/80 py-1 px-2 rounded-md items-center duration-200 ease-in hover:cursor-pointer"
+                  onClick={() => openShortcut(shortcut.link)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openShortcut(shortcut.link);
+                    }
+                  }}
+                >
+                  <p className="text-base ml-2">{shortcut.name}</p>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-transparent hover:text-white" onClick={(e) => e.stopPropagation()}>
+                        <MoreHorizontal />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="start">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          deleteShortcut(folderName, i);
+                          updateData();
+                        }}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ))}
+            </div>
             <div className="w-full flex justify-end">
               <Button
                 onClick={() => {
