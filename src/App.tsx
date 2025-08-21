@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CreateTab from "./components/CreateTab";
-import { deleteTab, deleteShortcut, getData } from "./lib/storage";
+import { deleteTab, deleteShortcut, getData, moveShortcut } from "./lib/storage";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "./components/ui/button";
 import CreateShortcut from "./components/CreateShortcut";
@@ -18,16 +18,7 @@ function App() {
   }
 
   function openShortcut(link: string) {
-    // Use Chrome extension API when available; fall back to window.open during web dev
-    try {
-      if (typeof chrome !== "undefined" && chrome?.tabs?.create) {
-        chrome.tabs.create({ url: link });
-      } else {
-        window.open(link, "_blank", "noopener,noreferrer");
-      }
-    } catch {
-      window.open(link, "_blank", "noopener,noreferrer");
-    }
+    window.open(link, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -73,9 +64,38 @@ function App() {
                         <MoreHorizontal />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56" align="start">
+                    <DropdownMenuContent
+                      className="w-56"
+                      align="start"
+                      onClick={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => e.stopPropagation()}
+                    >
+                      {i > 0 && (
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            moveShortcut(folderName, i, i - 1);
+                            updateData();
+                          }}
+                        >
+                          Move Up
+                        </DropdownMenuItem>
+                      )}
+                      {i < data[folderName].length - 1 && (
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            moveShortcut(folderName, i, i + 1);
+                            updateData();
+                          }}
+                        >
+                          Move Down
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           deleteShortcut(folderName, i);
                           updateData();
                         }}

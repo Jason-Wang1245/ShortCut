@@ -64,3 +64,25 @@ export function deleteShortcut(tab: string, index: number) {
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storageObject));
   return true;
 }
+
+export function moveShortcut(tab: string, fromIndex: number, toIndex: number) {
+  const storageJson = localStorage.getItem(LOCAL_STORAGE_KEY);
+  const storageObject: Shortcut = storageJson ? JSON.parse(storageJson) : {};
+
+  if (!(tab in storageObject)) return false;
+  const list = storageObject[tab];
+  if (
+    fromIndex < 0 ||
+    fromIndex >= list.length ||
+    toIndex < 0 ||
+    toIndex >= list.length ||
+    fromIndex === toIndex
+  ) {
+    return false;
+  }
+
+  const [item] = list.splice(fromIndex, 1);
+  list.splice(toIndex, 0, item);
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storageObject));
+  return true;
+}
